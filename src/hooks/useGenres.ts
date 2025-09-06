@@ -1,26 +1,21 @@
 import { useEffect, useState } from "react";
 import apiClient from "../services/api-client";
 
-export interface Game {
-    id: number;
-    name: string;
-    background_image: string;
-    parent_platforms: {platform: Platform}[];
-    metacritic: number;
-}
-
-export interface Platform{
+export interface Genres {
     id: number;
     name: string;
     slug: string;
-}
-interface GamesResponse {
-    count: number;
-    results: Game[];
+    games_count: number;
+    image_background: string;
 }
 
-const useGames = () => {
-    const [games, setGames] = useState<Game[]>([]);
+interface GenresResponse {
+    count: number;
+    results: Genres[];
+}
+
+const useGenres = () => {
+    const [genres, setGenres] = useState<Genres[]>([]);
     const [error, setError] = useState('');
     const [isLoading, setLoading] = useState(false);
         
@@ -28,8 +23,8 @@ const useGames = () => {
         setLoading(true);
         const controller = new AbortController(); 
         
-        apiClient.get<GamesResponse>('/games', {signal: controller.signal})
-            .then(res => {setGames(res.data.results); setLoading(false);})
+        apiClient.get<GenresResponse>('/genres', {signal: controller.signal})
+            .then(res => {setGenres(res.data.results); setLoading(false);})
             .catch(err => {
                 if (err.name === 'CanceledError') return;
                 setError(err.message);
@@ -39,7 +34,7 @@ const useGames = () => {
         return () => controller.abort();
     }, []);
       
-    return {games, error, isLoading};
+    return {genres, error, isLoading};
 }
 
-export default useGames;
+export default useGenres;
