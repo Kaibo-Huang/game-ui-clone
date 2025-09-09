@@ -1,4 +1,4 @@
-import { Grid, GridItem, Show } from "@chakra-ui/react";
+import { Grid, GridItem, HStack, Show } from "@chakra-ui/react";
 import NavBar from "./Components/NavBar";
 import theme from './theme'
 import GameGrid from "./Components/GameGrid";
@@ -7,11 +7,14 @@ import { useState } from "react";
 import { Genres } from "./hooks/useGenres";
 import PlatformSelector from "./Components/PlatformSelector";
 import { Platform } from "./hooks/useGames";
+import SortSelector from "./Components/SortSelector";
 
+export interface GameQuery{
+  genre: Genres | null;
+  platform: Platform | null;
+}
 function App() {
-
-  const [selectedGenre, setSelectedGenre] = useState<Genres | null>(null);
-  const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null);
+  const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
   return (
     <>
       <Grid templateAreas={{base: `"nav" "main"`,
@@ -24,11 +27,20 @@ function App() {
         <GridItem area = 'nav'> <NavBar /></GridItem>
        
         <Show above = "lg" ><GridItem area = 'aside' paddingX={5}>
-          <GenreList onSelectedGenre={(genre) => setSelectedGenre(genre)} selectedGenre = {selectedGenre}></GenreList>
+          <GenreList onSelectedGenre={(genre) => setGameQuery({...gameQuery, genre })} selectedGenre = {gameQuery.genre}></GenreList>
           </GridItem>
           
           </Show>
-        <GridItem area = 'main'><PlatformSelector selectedPlatform = {selectedPlatform} onSelectedPlatform={(platform) => setSelectedPlatform(platform)}></PlatformSelector><GameGrid selectedGenre={selectedGenre}/></GridItem>
+        <GridItem area = 'main'>
+          <HStack spacing = {5} paddingLeft={2}>
+          <PlatformSelector selectedPlatform = {gameQuery.platform} onSelectedPlatform={(platform) => setGameQuery({...gameQuery, platform})}>
+
+          </PlatformSelector>
+          <SortSelector></SortSelector>
+        </HStack>
+        <GameGrid 
+   gameQuery={gameQuery} />
+    </GridItem>
       </Grid>
     </>
   );
