@@ -38,9 +38,7 @@ function App() {
           <Box paddingLeft={2}>
          <GameHeading gameQuery={gameQuery}></GameHeading>
           <HStack marginBottom= {5} spacing = {5}>
-          <PlatformSelector selectedPlatform = {gameQuery.platform} onSelectedPlatform={(platform) => setGameQuery({...gameQuery, platform})}>
-
-          </PlatformSelector>
+          <PlatformSelector selectedPlatform = {gameQuery.platform} onSelectedPlatform={(platform) => setGameQuery({...gameQuery, platform})}/>
           <SortSelector sortOrder = {gameQuery.sortOrder} onSelectSortOrder={(sortOrder) => {setGameQuery({...gameQuery, sortOrder})}}></SortSelector>
           
         </HStack>
